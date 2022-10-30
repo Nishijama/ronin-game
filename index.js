@@ -59,20 +59,52 @@ class Character extends Sprite {
             parry: { pressed: false },
         }
     }
-    attack() {
 
-        this.attackBox = {
+    attackRight() {
+        return this.attackBox = {
+            x: this.position.x + this.width/2,
             y: this.position.y + 10,
             width: 100,
             height: 40
         } 
+    }
+
+    attackLeft() {
+       return this.attackBox = {
+            x: this.position.x - (90 - this.width/2),
+            y: this.position.y + 10,
+            width: 100,
+            height: 40
+        } 
+    }
+
+    attack() {
+
+
         if (this.direction === "right") {
-            this.attackBox.x = this.position.x + this.width/2;
+            this.attackRight();
         } else {
-            this.attackBox.x = this.position.x - (90 - this.width/2);
+            this.attackLeft();
         }
         c.fillStyle = 'blue'
         c.fillRect(this.attackBox.x, this.attackBox.y, this.attackBox.width, this.attackBox.height)
+
+        
+        if (this.controls.quickAttack.pressed === true &&
+            this.position.x < enemy.position.x &&
+            this.attackBox.x + this.attackBox.width > enemy.position.x &&
+            this.attackBox.y >= enemy.position.y)
+            {
+                console.log("hit!")
+            }
+        if (this.controls.quickAttack.pressed === true &&
+            this.position.x > enemy.position.x &&
+            this.position.x - (90 - this.width/2) < enemy.position.x) {
+                console.log("hit!")
+            }
+        this.controls.quickAttack.pressed = false;
+    
+    
     }
     parry() {
         this.parryBox = {
@@ -134,7 +166,6 @@ function animate() {
     drawBackground();
     player.update();
     enemy.update();
-    
     
 
     window.requestAnimationFrame(animate)
