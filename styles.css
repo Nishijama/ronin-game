@@ -8,12 +8,69 @@ body {
     height: 100vh;
     width: 100vw;
     margin: 0px;
-    background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* background-image: linear-gradient(to top, #09203f 0%, #537895 100%); */
+    background-image: url('background.jpg');
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
 #canvas1 {
     border-radius: 20px;
+}
+
+.game-area {
+    position: relative;
+}
+.ui {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    transform: scaleX(-1);
+    border-radius: 20px;
+}
+
+.fighter-profile {
+    display: flex;
+    align-items: center;
+}
+
+.fighter-stats {
+    width: 300px;
+    padding: 10px;
+    font-size: 24px;
+}
+
+.health-wrapper-left{
+    display: flex;
+    justify-content: start;
+}
+
+.health-wrapper-right{
+    display: flex;
+    justify-content: end;
+}
+
+.health-bar {
+    background-color: #7c1111;
+    width: 100%;
+    height: 3px;
+}
+
+.right {
+    text-align: right;
+}
+
+div {
+
+color: #153981;
 }
