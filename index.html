@@ -8,15 +8,15 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Hello there</h1>
+    <h1></h1>
 
     <div class="game-area">
         <div class="ui">
 
             <div class="fighter-profile">
-                <img src="musashi.jpeg" alt="">
+                <img src="./images/musashi.jpeg" alt="">
                 <div class="fighter-stats left">
-                    <p>Miyamoto Musashi</p>
+                    <p id="player-name">Miyamoto Musashi</p>
                     <div class="health-wrapper-left">
                         <div class="health-bar" id="player-health-bar"></div>
                     </div>
@@ -25,15 +25,18 @@
 
             <div class="fighter-profile">
                 <div class="fighter-stats right">
-                    <p>Sasaki Kojiro Ganryu</p>
+                    <p id="opponent-name">Sasaki Kojiro</p>
                     <div class="health-wrapper-right">
                         <div class="health-bar" id="enemy-health-bar"></div>
                     </div>
                 </div>
-                <img src="kojiro.png" alt="">
+                <img src="./images/kojiro.png" alt="">
             </div>
         </div>
         <canvas id="canvas1"></canvas>
+        <script src="consts.js"></script>
+        <script src="utils.js"></script>
+        <script src="classes.js"></script>
         <script src="index.js"></script>
     </div>
 </body>
