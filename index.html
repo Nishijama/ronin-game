@@ -9,7 +9,32 @@
 </head>
 <body>
     <h1>Hello there</h1>
-    <canvas id="canvas1"></canvas>
-    <script src="index.js"></script>
+
+    <div class="game-area">
+        <div class="ui">
+
+            <div class="fighter-profile">
+                <img src="musashi.jpeg" alt="">
+                <div class="fighter-stats left">
+                    <p>Miyamoto Musashi</p>
+                    <div class="health-wrapper-left">
+                        <div class="health-bar" id="player-health-bar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fighter-profile">
+                <div class="fighter-stats right">
+                    <p>Sasaki Kojiro Ganryu</p>
+                    <div class="health-wrapper-right">
+                        <div class="health-bar" id="enemy-health-bar"></div>
+                    </div>
+                </div>
+                <img src="kojiro.png" alt="">
+            </div>
+        </div>
+        <canvas id="canvas1"></canvas>
+        <script src="index.js"></script>
+    </div>
 </body>
 </html>
