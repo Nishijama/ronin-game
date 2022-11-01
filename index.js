@@ -9,8 +9,8 @@ window.addEventListener('resize', () => {
 //project initialization
 const canvas = document.getElementById("canvas1")
 const c = canvas.getContext('2d')
-canvas.width = 1024;
-canvas.height = 576;
+canvas.width = 1280;
+canvas.height = 720;
 const GRAVITY = 0.6;
 c.fillRect(0,0,canvas.width, canvas.height)
 
@@ -20,6 +20,7 @@ background.src = "./background.jpg";
 background.onload = drawBackground();
 
 function drawBackground() {
+    // background.style.opacity = 0
     c.drawImage(background, 0, 0);
 }
 
@@ -42,11 +43,17 @@ class Sprite {
     }
 }
 
+
+
 class Character extends Sprite {
     constructor(settings) {
         super(settings);
+        
+        // size
         this.height = 150;
         this.width = 40;
+
+        //controls
         this.lastKey;
         settings.direction ? this.direction = settings.direction : this.direction = "right";
 
@@ -58,52 +65,29 @@ class Character extends Sprite {
             quickAttack: { pressed: false },
             parry: { pressed: false },
         }
+        this.initialHealth = settings.health;
+        this.currentHealth = this.initialHealth;
     }
 
-    attackRight() {
-        return this.attackBox = {
+
+    attack() {
+        // create an attack-box 
+        this.attackBox = {
             x: this.position.x + this.width/2,
             y: this.position.y + 10,
             width: 100,
             height: 40
         } 
-    }
-
-    attackLeft() {
-       return this.attackBox = {
-            x: this.position.x - (90 - this.width/2),
-            y: this.position.y + 10,
-            width: 100,
-            height: 40
-        } 
-    }
-
-    attack() {
-
-
+        // define attack direction
         if (this.direction === "right") {
-            this.attackRight();
+            this.attackBox.x = this.position.x + this.width/2;
         } else {
-            this.attackLeft();
+            this.attackBox.x = this.position.x - (90 - this.width/2)
         }
+        // show the attack
         c.fillStyle = 'blue'
         c.fillRect(this.attackBox.x, this.attackBox.y, this.attackBox.width, this.attackBox.height)
-
-        
-        if (this.controls.quickAttack.pressed === true &&
-            this.position.x < enemy.position.x &&
-            this.attackBox.x + this.attackBox.width > enemy.position.x &&
-            this.attackBox.y >= enemy.position.y)
-            {
-                console.log("hit!")
-            }
-        if (this.controls.quickAttack.pressed === true &&
-            this.position.x > enemy.position.x &&
-            this.position.x - (90 - this.width/2) < enemy.position.x) {
-                console.log("hit!")
-            }
-        this.controls.quickAttack.pressed = false;
-    
+ 
     
     }
     parry() {
@@ -141,40 +125,84 @@ class Character extends Sprite {
             this.velocity.y = -15;
         }
         if (this.controls.quickAttack.pressed) this.attack();
+        this.controls.quickAttack.pressed = false;
         if (this.controls.parry.pressed) this.parry();
     }
 }
 
 class Player extends Character {
     constructor(settings) {
-        settings.color = 'blue'
+        settings.color = '#153981'
         super(settings);
+
+        //game
+        this.name = settings.name
+        this.healthBar = document.getElementById('player-health-bar')
+        this.healthBar.style.width = this.health+"%";
     }
 }
 
 class Opponent extends Character {
     constructor(settings) {
-        settings.color = 'red'
+        settings.color = '#7c1111'
         super(settings);
+
+        this.name = settings.name
+        this.healthBar = document.getElementById('enemy-health-bar')
+        this.healthBar.style.width = this.health+"%";
     }
 }
 
-const player = new Player({position: { x: 0, y: 0 }, velocity: {x: 0, y: 0}});
-const enemy = new Opponent({position: { x: canvas.width - 33, y:0 }, velocity: {x: 0, y: 0}});
+const player = new Player({position: { x: 0, y: 0 }, velocity: {x: 0, y: 0}, health: 100, name:"Musashi"});
+const enemy = new Opponent({position: { x: canvas.width - 33, y:0 }, velocity: {x: 0, y: 0}, health: 30, name:"Kojiro"});
 
 function animate() {
     drawBackground();
     player.update();
     enemy.update();
-    
-
     window.requestAnimationFrame(animate)
+    detectForCollsion(player, enemy)
+    detectForCollsion(enemy, player)
+    checkForDead(enemy, player)
 }
 
 animate();
 
+function checkForDead(...characters) {
+    for (const character of characters) {
+        if (character.currentHealth <= 0)
+        console.log(`${character.name} is dead`)
+        return character
+    }
+}
+
+function detectForCollsion(attacker, target) {
+    if (attacker.hasOwnProperty("attackBox")){
+
+        if (attacker.position.x < target.position.x &&
+            attacker.attackBox.x + attacker.attackBox.width > target.position.x &&
+            attacker.attackBox.y >= target.position.y)
+            {
+                target.currentHealth -= 10;
+                console.log("hit!")
+                console.log(target.currentHealth)
+                console.log(target.initialHealth)
+                target.healthBar.style.width = target.currentHealth / target.initialHealth *100 + "%";
+                console.log(target.healthBar.style.width)
+            }
+        if (attacker.position.x > target.position.x &&
+            attacker.attackBox.x < target.position.x + target.width 
+            && attacker.attackBox.y >= target.position.y
+            ) {
+                target.currentHealth -= 10;
+                target.healthBar.style.width = target.currentHealth / target.initialHealth *100 + "%";
+                console.log("hit!")
+            }   
+        delete attacker.attackBox
+    }
+}
+
 window.addEventListener('keydown', ({key}) => {
-    console.log(key)
     switch(key) {
         case "a":
             player.controls.left.pressed = true;
@@ -208,7 +236,6 @@ window.addEventListener('keydown', ({key}) => {
 })
 
 window.addEventListener('keyup', (e) => {
-    console.log(e)
     switch(e.key) {
         case "a":
             player.controls.left.pressed = false;
