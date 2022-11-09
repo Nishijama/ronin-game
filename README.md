@@ -1,10 +1,4 @@
-# ronin-game
-A fighting game that follows the legendary story of a famous samurai
+#A single-player fighting game
+Work in progress
 
-
-
-- Create a welcome screen
-- Create a class for story screens
-- Create a class-based collection of opponents
-- Create the main fighting loop
-- Make the game responsive
+A samurai-themed fighting platformer built in JavaScript using HTML5 canvas.
